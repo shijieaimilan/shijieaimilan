@@ -13,12 +13,12 @@
     }
     else
     {
-		var t1 = new Thing();
-		t1.->$title = 'plancha';
-		var t2 = new Thing();
-		t2.->$title = 'savana';
+		$t1 = new Thing();
+		$t1.->$title = 'plancha';
+		$t2 = new Thing();
+		$t2.->$title = 'savana';
 		$array = array(
-         t1,t2
+         $t1,$t2
 		 );
 	
         echo json_encode($array);
