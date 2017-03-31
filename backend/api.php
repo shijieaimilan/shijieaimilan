@@ -1,7 +1,10 @@
-//https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
+
 <?php 
 
-include 'db-config.php';
+include 'service.php';
+
+//https://www.leaseweb.com/labs/2015/10/creating-a-simple-rest-api-in-php/
+//ej. http://localhost/api.php/{$table}/{$id}
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
@@ -9,47 +12,48 @@ $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
 
 $my_method = $request[0];
 
-echo 'metodo: '. $request[0]. '<br>';
+$rv;
 
-echo ' test data: '.$_POST;
- 
-// connect to the mysql database
-// Create connection
-$conn = new mysqli($db, $user, $pass, 'whishlist');
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
+try {
+    $service = new Service;
 
+    $data;
+    if(isset($_POST['data'])) {
+        $data=json_decode($_POST['data'], true);
+    }
 
-switch ($my_method) {
-    case 'get-all-things':
-  		$sql = "SELECT * FROM things";
-        $result = $conn->query($sql);
+    //json_encode($data);
 
-        $rows = array();
-        while($r = mysqli_fetch_assoc($result)) {
-            $rows[] = $r;
-        } 
-        echo json_encode($rows);
-        break;
-    case 'add-thing':
-        echo "i es igual a 2";
-        break;
-    case 'reserve-thing':
-        echo "i es igual a 2";
-        break;
-    case 'remove-reserved-thing':
-        echo "i es igual a 2";
-        break;
-    case 'confirm-attendance':
-        echo "i es igual a 2";
-        break;
+    switch ($my_method) {
+        case 'get-all-things':  
+            $rv = $service->getAll();
+            break;
+        case 'add-thing':
+            $rv = $service->addThings($data);
+            break;
+        case 'reserve-thing':
+            $rv = $service->reserveThing($data);
+            break;
+        case 'remove-reserved-thing':
+            $rv = $service->removeReservedThing($data);
+            break;
+        case 'delete-thing':
+            $rv = $service->deleteThing($data);
+            break;
+        case 'update-thing':
+            $rv = $service->updateThing($data);
+            break;
+        case 'login':
+            $rv = $service->login($data);
+            break;
+    }
+
+} catch (Exception $e) {
+    $rv = 'Error: '. $e->getMessage();
 }
 
 
 
+echo ''.json_encode($rv).'';
 
-
-$conn->close();
 ?>
