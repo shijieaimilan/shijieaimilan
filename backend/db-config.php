@@ -1,10 +1,8 @@
 <?php
 
-$host = 'localhost';
+$host = 'mysql.hostinger.com.ar';
 $db = 'u693843213_wed';
-//$user = 'root';
-//$pass = '';
- $user = 'u693843213_wed';
- $pass = 'Eze123456';
+$user = 'u693843213_wed';
+$pass = 'Eze123456';
 
 ?>
